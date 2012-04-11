@@ -1,0 +1,53 @@
+[general]
+#caching options perhaps?
+
+[input]
+#Create regexp to fetch the Series, Season, and Episode from the files
+#Group 1 must contain the data
+#For multipart episodes, groups 1,2,3...N contain the episode numbers
+
+series[0]=(.*)\.[sS][0-9]{2,2}[eE][0-9]{2,2}\..*
+season[0]=.*\.[sS]([0-9]{2,2})[eE][0-9]{2,2}\..*
+episode[0]=.*\.[sS][0-9]{2,2}[eE]([0-9]{2,2})\..*
+
+series[1]=(.*)\.[sS][0-9]{2,2}[eE][0-9]{2,2}[eE][0-9]{2,2}\..*
+season[1]=.*\.[sS]([0-9]{2,2})[eE][0-9]{2,2}[eE][0-9]{2,2}\..*
+episode[1]=.*\.[sS][0-9]{2,2}[eE]([0-9]{2,2})[eE]([0-9]{2,2})\..* 
+#has two groups, I wonder if we can generalize it
+
+series[2]=(.*) - [sS][0-9]{2,2}[eE][0-9]{2,2} - .*
+season[2]=.* - [sS]([0-9]{2,2})[eE][0-9]{2,2} - .*
+episode[2]=.* - [sS][0-9]{2,2}[eE]([0-9]{2,2}) - .*
+
+series[3]=(.*) - [sS][0-9]{2,2}[eE][0-9]{2,2}[eE][0-9]{2,2} - .*
+season[3]=.* - [sS]([0-9]{2,2})[eE][0-9]{2,2}[eE][0-9]{2,2} - .*
+episode[3]=.* - [sS][0-9]{2,2}[eE]([0-9]{2,2})[eE]([0-9]{2,2}) - .*
+
+series[4]=(.*)\.[0-9]{4,4}\..*
+season[4]=.*\.([0-9]{2,2})[0-9]{2,2}\..*
+episode[4]=.*\.[0-9]{2,2}([0-9]{2,2})\..*
+
+series[5]=(.*)\.[0-9]{3,3}\..*
+season[5]=.*\.([0-9])[0-9]{2,2}\..*
+episode[5]=.*\.[0-9]([0-9]{2,2})\..*
+
+[output]
+#%Field% - An upper case first letter with the rest lower case implies get in normal case
+#%field% - All lower case means get in lower case
+#%FIELD% - All upper case means get in upper case
+#%.field.% - replace all spaces with "."s
+#valid fields are:
+#%name% - series title
+#%title% - episode title
+#%season% - season number, filled to two digits
+#%episode% - episode number within the season, filled to two digits
+#%epnum% - overall episode number
+#%prodnum% - production number
+#%airdate% - original airdate
+#%link% - link to episode info
+#%rating% - Neilsen Ratings
+#%screencap% - link to screencap
+#%totalseasons% - total seasons
+
+format=%Name% - S%season%E%episode% - %Title%
+#format=%.name.%.s%season%e%episode%.%.title.%
