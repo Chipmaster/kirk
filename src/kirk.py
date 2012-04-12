@@ -58,7 +58,7 @@ def fixFile(target, directory, showid, dryrun):
     if showid != None:
         if dryrun == 'true':
             print "call to tvrage.py = tvrage.py " + title + " " + season + \
-                  " " + str(episodes) + " --showid " + showid
+                  " " + str(episodes) + " --showid " + `showid`
         showid = [showid]
         newfile = tvrage.getName(title, showid, int(season), episodes)
 
@@ -99,7 +99,10 @@ def main():
     args = parser.parse_args()
     
     target = args.target[0]
-    showid = args.showid
+    if args.showid != None:
+        showid = args.showid[0]
+    else:
+        showid = None
     dryrun = args.dryrun
 
     if not os.path.exists(target):
