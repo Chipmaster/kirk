@@ -61,7 +61,7 @@ def exerciseTag(formatStyle, tag, showid, seasonnum, episode):
 	else:
 		formatStyle = formatStyle.replace(realTag, getData(showid, seasonnum, episode, realTag.replace('%', '')))
 
-	return exerciseTag(formatStyle, tag, showid, seasonnum, episode)
+	return descape(exerciseTag(formatStyle, tag, showid, seasonnum, episode))
 
 
 def buildFileName(showid, seasonnum, episodes):
