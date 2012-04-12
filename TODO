@@ -1,3 +1,8 @@
+Known Bugs
+1. Can't run against multiple tv shows.  Fetches the first show's id and goes with it
+
+
+Wishes
 1. GUI to stage renames and make regular expression formatting easier.
 2. Create build and install system
 3. Create release binaries in .deb and .rpm
