@@ -3,7 +3,7 @@ AC_INIT(kirk, 0.1.0, chipmaster32@gmail.com)
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR(src)
 
-AM_PATH_PYTHON([2.7])
+AM_PATH_PYTHON([2.6])
 
 AM_INIT_AUTOMAKE
 
