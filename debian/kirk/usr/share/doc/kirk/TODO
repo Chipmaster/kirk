@@ -1,0 +1,10 @@
+Known Bugs
+1. Can't run against multiple tv shows.  Fetches the first show's id and goes with it
+
+
+Wishes
+1. GUI to stage renames and make regular expression formatting easier.
+2. Create release binaries in .deb and .rpm
+3. Investigate modifying video tags (like id3 for tv)
+4. Full plugin system so that you can scrape info from more than TV Rage
+5. Verbose flag and retool -d flag

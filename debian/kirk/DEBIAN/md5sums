@@ -1,0 +1,9 @@
+9ecf906c0bba5c50b4ae62f99761d18a  usr/bin/kirk
+38f8bed4e3a880dbba524eb3578d0318  usr/share/doc/kirk/NEWS.gz
+eab65775e97e367af0febafb6497b4ad  usr/share/doc/kirk/README
+d740dad03b79b80a2e903989c9192a79  usr/share/doc/kirk/TODO
+383b8523cfae6cd421fda592f44b3d41  usr/share/doc/kirk/changelog.Debian.gz
+1a022bc403244bd11c919b4b7ee31d01  usr/share/doc/kirk/changelog.gz
+d047a49091d3a0a4f2f7a50751152943  usr/share/doc/kirk/copyright
+de4709f4e7b91f5b208e0d5ba6e519b9  usr/share/pyshared/kirk.py
+b31771c16381d3ad075042e6c1460565  usr/share/pyshared/tvrage.py

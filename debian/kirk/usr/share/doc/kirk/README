@@ -1,0 +1,10 @@
+Depends on Python >= 2.7
+
+$./autogen.sh
+$mkdir build
+$cd build
+$../configure
+$make
+#make install
+
+Copy src/.kirkrc to ~/.kirkrc

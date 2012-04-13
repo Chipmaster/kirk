@@ -1,0 +1,16 @@
+Source: kirk
+Section: utils
+Priority: optional
+Maintainer: Patrick Stetter <chipmaster32@gmail.com>
+Build-Depends: debhelper (>= 7.0.50~), autotools-dev, python
+Standards-Version: 3.8.4
+Homepage: http://code.google.com/p/kirk/
+Vcs-Git: https://code.google.com/p/kirk/
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/kirk.git;a=summary
+
+Package: kirk
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, python (>= 2.7)
+Description: tv file renaming utility
+ kirk is a python application which allows one to quickly and easily 
+ rename a collection of tv files with a preferred structure.

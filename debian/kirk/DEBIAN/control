@@ -1,0 +1,12 @@
+Package: kirk
+Version: 0.1-1
+Architecture: all
+Maintainer: Patrick Stetter <chipmaster32@gmail.com>
+Installed-Size: 116
+Depends: python (>= 2.7)
+Section: utils
+Priority: optional
+Homepage: http://code.google.com/p/kirk/
+Description: tv file renaming utility
+ kirk is a python application which allows one to quickly and easily
+ rename a collection of tv files with a preferred structure.
