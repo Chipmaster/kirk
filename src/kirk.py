@@ -31,12 +31,11 @@ def traverseDirectory(target, showid, dryrun):
         else:
             fixFile(d, target, showid, dryrun)
 
-
 def fixFile(target, directory, showid, dryrun):
     extension = os.path.splitext(target)[1][1:]
 
     config = ConfigParser.RawConfigParser()
-    config.read(os.path.expanduser('~/.kirkrc'))
+    config.read(['/etc/kirk.conf', '/usr/local/etc/kirk.conf', os.path.expanduser('~/.kirkrc')])
 
     seriesParse  = tuple([ item[1] for item in config.items('input') if item[0].startswith("series")])
     seasonParse  = tuple([ item[1] for item in config.items('input') if item[0].startswith("season")])

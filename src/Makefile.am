@@ -1,5 +1,6 @@
-python_PYTHON = tvrage.py
+python_PYTHON  = tvrage.py
 python_SCRIPTS = kirk.py
+sysconf_DATA  = kirk.conf
 
 bin_SCRIPTS=kirk
 
