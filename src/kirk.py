@@ -71,6 +71,9 @@ def fixFile(target, directory, showid, debug, backup):
     season = re.compile(seasonParse[i]).match(target).group(1)
     episodes = re.compile(episodeParse[i]).match(target).groups()
 
+    if showid == None and title == "":
+        print "Could not determine series for " target
+        return
 
     if debug and showid != None:
         print "Using showid: " + `showid[0]`
