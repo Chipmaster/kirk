@@ -40,12 +40,14 @@ def nukeDir(directory):
     os.rmdir(directory)
 
 def traverseDirectory(target, showid, debug, backup):
-    if backup and os.path.exists(target + "/.kirk-backup"):
-        nukeDir(target + "/.kirk-backup")
     dirList = os.listdir(target)
     for d in dirList:
         if os.path.isdir(target + "/" + d):
-            traverseDirectory(target + "/" + d, showid, debug, backup)
+            if d == ".kirk-backup":
+               if backup:
+                   nukeDir(target + "/" + d)
+            else:
+                traverseDirectory(target + "/" + d, showid, debug, backup)
         else:
             fixFile(d, target, showid, debug, backup)
 
