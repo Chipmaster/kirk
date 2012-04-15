@@ -20,7 +20,7 @@ function createfile {
 
 
 if [ "$1" = "-h" -o "$1" = "--help" ]; then
-    echo "usage ./" $0 " from to"
+    echo "usage " $0 " from to"
     exit 1
 fi
 

@@ -23,15 +23,33 @@ import ConfigParser
 
 import tvrage
 
-def traverseDirectory(target, showid, dryrun):
+def ensureDir(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+def nukeDir(directory):
+    if directory[-1] == os.sep: directory = directory[:-1]
+    files = os.listdir(directory)
+    for f in files:
+        if f=='.' or f=='..': continue
+        path = directory + os.sep + f
+        if os.path.isdir(path):
+            nukeDir(directory)
+        else:
+            os.unlink(path)
+    os.rmdir(directory)
+
+def traverseDirectory(target, showid, debug, backup):
+    if backup and os.path.exists(target + "/.kirk-backup"):
+        nukeDir(target + "/.kirk-backup")
     dirList = os.listdir(target)
     for d in dirList:
         if os.path.isdir(target + "/" + d):
-            traverseDirectory(target + "/" + d, showid, dryrun)
+            traverseDirectory(target + "/" + d, showid, debug, backup)
         else:
-            fixFile(d, target, showid, dryrun)
+            fixFile(d, target, showid, debug, backup)
 
-def fixFile(target, directory, showid, dryrun):
+def fixFile(target, directory, showid, debug, backup):
     extension = os.path.splitext(target)[1][1:]
 
     config = ConfigParser.RawConfigParser()
@@ -53,20 +71,16 @@ def fixFile(target, directory, showid, dryrun):
     season = re.compile(seasonParse[i]).match(target).group(1)
     episodes = re.compile(episodeParse[i]).match(target).groups()
 
-    newfile = ""
-    if showid != None:
-        if dryrun == 'true':
-            print "call to tvrage.py = tvrage.py " + title + " " + season + \
-                  " " + str(episodes) + " --showid " + `showid`
-        showid = [showid]
-        newfile = tvrage.getName(title, showid, int(season), episodes)
 
+    if debug and showid != None:
+        print "Using showid: " + `showid[0]`
+    elif debug:
+        print "Determining showid from: " + title
 
-    else:
-        if dryrun == 'true':
-            print "call to tvrage.py = tvrage.py " + title + " " + season + \
-                  " " + str(episodes)
-        newfile = tvrage.getName(title, None, int(season), episodes)
+    if debug:
+        print "call to tvrage.py = tvrage.py " + title + " " + season + \
+            " " + str(episodes) + " --showid " + `showid`
+    newfile = tvrage.getName(title, showid, int(season), episodes)
 
     source = os.path.normpath(directory + "/" + target)
     if newfile[len(newfile) - 1] != '.':
@@ -76,9 +90,18 @@ def fixFile(target, directory, showid, dryrun):
         print "Renaming: " + target + "  to:  " + newfile + extension
         dest = os.path.normpath(directory + "/" + newfile + extension)
 
-    if dryrun != 'true':
-        if target != (newfile + extension):
-            os.rename(source, dest)
+    if target != (newfile + extension):
+        if backup:
+            backupDir = directory + "/.kirk-backup"
+            ensureDir(backupDir)
+            
+            backupFile = backupDir + "/" + target
+            if os.path.exists(backupFile):
+                os.remove(backupFile)
+
+            os.link(source, backupFile)
+        
+        os.rename(source, dest)
 
  
 
@@ -91,18 +114,19 @@ def main():
                         help='Target Directory or File')
     parser.add_argument('-s', '--showid', metavar='ShowID', dest='showid', 
                         type=int, nargs=1, help='The TVRage Show ID Number')
-    parser.add_argument('-d', '--dry-run', dest='dryrun', action='store_const', 
-                        const="true", default="false", help="Perform a dry run "
-                        "showing what will happen")
-    
+    parser.add_argument('-D', '--debug', dest='debug', action='store_true', 
+                        default=False, help="Show debugging "
+                        "information")
+    parser.add_argument('-B', '--backup', dest='backup', action='store_true', 
+                        default=False, help="Create a backup directory with "
+                        "the old file names as hard links to the new files")
+
     args = parser.parse_args()
     
     target = args.target[0]
-    if args.showid != None:
-        showid = args.showid[0]
-    else:
-        showid = None
-    dryrun = args.dryrun
+    showid = args.showid
+    debug = args.debug
+    backup = args.backup
 
     if not os.path.exists(target):
         print "Target does not exist"
@@ -112,13 +136,13 @@ def main():
     tvrage.clearCache()
     
     if os.path.isdir(target):
-        traverseDirectory(target, showid, dryrun)
+        traverseDirectory(target, showid, debug, backup)
     else:
         directory = os.path.dirname(target)
         if directory == "":
             directory = "."
         f = os.path.basename(target)
-        fixFile(f, directory, showid, dryrun)
+        fixFile(f, directory, showid, debug, backup)
         
     return 0
 
