@@ -4,7 +4,6 @@ Known Bugs
 
 Wishes
 1. GUI to stage renames and make regular expression formatting easier.
-2. Create release binaries in .deb and .rpm
-3. Investigate modifying video tags (like id3 for tv)
-4. Full plugin system so that you can scrape info from more than TV Rage
-5. Verbose flag and retool -d flag
+2. Investigate modifying video tags (like id3 for tv)
+3. Full plugin system so that you can scrape info from more than TV Rage
+4. Develope automated testing suite
