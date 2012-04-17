@@ -89,10 +89,12 @@ def fixFile(target, directory, showid, debug, backup):
 
     source = os.path.normpath(directory + "/" + target)
     if newfile[len(newfile) - 1] != '.':
-        print "Renaming: " + target + "  to:  " + newfile + "." + extension
+        if debug:
+            print "Renaming: " + target + "  to:  " + newfile + "." + extension
         dest = os.path.normpath(directory + "/" + newfile + "." + extension)
     else:
-        print "Renaming: " + target + "  to:  " + newfile + extension
+        if debug:
+            print "Renaming: " + target + "  to:  " + newfile + extension
         dest = os.path.normpath(directory + "/" + newfile + extension)
 
     if target != (newfile + extension):
