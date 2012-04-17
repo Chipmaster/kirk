@@ -1,9 +1,11 @@
 Known Bugs
-1. Can't run against multiple tv shows.  Fetches the first show's id and goes with it
+
 
 
 Wishes
 1. GUI to stage renames and make regular expression formatting easier.
 2. Investigate modifying video tags (like id3 for tv)
 3. Full plugin system so that you can scrape info from more than TV Rage
-4. Develope automated testing suite
+4. Develop automated testing suite
+6. List of accepted extensions to operate on
+7. Depreciate showid option, when there are multiple results from the parsed series name, show them to the user and let the user decide.  When no name can be found, let a user enter one.
