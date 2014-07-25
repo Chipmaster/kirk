@@ -21,7 +21,29 @@ import os
 import sys, codecs, locale
 import ConfigParser
 import re
+import time
 from xml.dom.minidom import parseString
+
+
+def urlRetry(url):
+    failCount = 0
+    success = False
+    data = {}
+    while failCount < 5 and success is False:
+        try:
+            data = urllib2.urlopen(url).read()
+        except IOError:
+            failCount = failCount + 1
+            print "tvrage error, retrying in 1 second"
+            time.sleep(1)
+        else:
+            success = True
+
+    if success is False:
+        raise Exception('Too many failures - I give up!')
+    
+    return data
+
 
 def descape (html):
     return html.replace('&amp;', '&').replace('&lt;', '<').replace('&gt;', '>').replace('&quot;', '"').replace('&#39;', '\'')
@@ -34,7 +56,7 @@ def getShowId (title):
     
     ensureDir(cachedir)
     if not(os.path.isfile(cachefile)):
-        data = urllib2.urlopen('http://services.tvrage.com/myfeeds/search.php?key=sCG8WH681LBuwaqyNNlf&show=' + searchstring).read()
+        data = urlRetry('http://services.tvrage.com/myfeeds/search.php?key=sCG8WH681LBuwaqyNNlf&show=' + searchstring)
         file = open(cachefile,"w")
         file.write(data)
         file.close()
@@ -140,6 +162,7 @@ def getXML(xml, field):
     else:
         return item
 
+
 def getData(showid, seasonNum, episodeNum, field):
     output = ""
 
@@ -155,7 +178,7 @@ def getData(showid, seasonNum, episodeNum, field):
     ensureDir(cachedir)
     cachefile = (cachedir + `showid`).encode('ascii')
     if not(os.path.isfile(cachefile)):
-        data = urllib2.urlopen('http://services.tvrage.com/myfeeds/episode_list.php?key=sCG8WH681LBuwaqyNNlf&sid=' + `showid`).read()
+        data = urlRetry('http://services.tvrage.com/myfeeds/episode_list.php?key=sCG8WH681LBuwaqyNNlf&sid=' + `showid`)
         file = open(cachefile,"w")
         file.write(data)
         file.close()
