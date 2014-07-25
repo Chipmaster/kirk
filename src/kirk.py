@@ -1,84 +1,33 @@
 #!/usr/bin/env python
-################################################################################
 #
-#  @file kirk.py
-#  @brief 
+#    Copyright (C) <year>  <name of author>
 #
-#  DETAILED DESCRIPTION
-#   
-#  @title Kirk
-#  @author <authors>
-#  @web code.google.com/p/kirk
-#  @created DATE
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
 #
-################################################################################
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
 #
-#  Copyright (C) <year>  <name of author>
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#  This program is free software: you can redistribute it and/or
-#  modify it under the terms of the GNU General Public License as
-#  published by the Free Software Foundation, either version 3 of the
-#  License, or (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful, but
-#  WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#  General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-################################################################################
-##------------------------------------------------------------------ :Libraries:
-##                      _    _ _                 _        
-##                     | |  (_) |__ _ _ __ _ _ _(_)___ ___
-##                     | |__| | '_ \ '_/ _` | '_|/  -_|_-<
-##                     |____|_|_.__/_| \__,_|_| |_\___/__/
-##                                                        
-## -----------------------------------------------------------------------------
+
 import sys, os, re
 import argparse
 import subprocess
 import ConfigParser
 
-##--------------------------------------------------------------------- :Global:
-##                            ___ _     _          _ 
-##                          /  __| |___| |__  __ _| |
-##                          | (_ |/  _ \ '_ \/ _` | |
-##                           \___|_\___/_.__/\__,_|_|
-##                                                   
-## -----------------------------------------------------------------------------
 import tvrage
 
-##------------------------------------------------------------------ :Functions:
-##                      ___             _   _             
-##                     | __|  _ _ _  __| |_(_)___ _ _  ___
-##                     | _| || | ' \/ _|  _|/  _ \ ' \(_-<
-##                     |_| \_,_|_||_\__|\__|_\___/_||_/__/
-##                                                        
-##
-##-----------------------------------------------------------------------------
-################################################################################
-#
-#  @brief 
-#  @warning 
-#  @param[in] 
-#  @return
-#
-################################################################################
-def ensureDir( directory ):
+def ensureDir(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-################################################################################
-#
-#  @brief 
-#  @warning 
-#  @param[in] 
-#  @return
-#
-################################################################################
-def nukeDir( directory ):
+def nukeDir(directory):
     if directory[-1] == os.sep: directory = directory[:-1]
     files = os.listdir(directory)
     for f in files:
@@ -88,37 +37,21 @@ def nukeDir( directory ):
             nukeDir(directory)
         else:
             os.unlink(path)
-            os.rmdir(directory)
+    os.rmdir(directory)
 
-################################################################################
-#
-#  @brief 
-#  @warning 
-#  @param[in] 
-#  @return
-#
-################################################################################
-def traverseDirectory( target, showid, debug, backup ):
+def traverseDirectory(target, showid, debug, backup):
     dirList = os.listdir(target)
     for d in dirList:
         if os.path.isdir(target + "/" + d):
             if d == ".kirk-backup":
-                if backup:
-                    nukeDir(target + "/" + d)
-                else:
-                    traverseDirectory(target + "/" + d, showid, debug, backup)
-                else:
-                    fixFile(d, target, showid, debug, backup)
+               if backup:
+                   nukeDir(target + "/" + d)
+            else:
+                traverseDirectory(target + "/" + d, showid, debug, backup)
+        else:
+            fixFile(d, target, showid, debug, backup)
 
-################################################################################
-#
-#  @brief 
-#  @warning 
-#  @param[in] 
-#  @return
-#
-################################################################################
-def fixFile( target, directory, showid, debug, backup ):
+def fixFile(target, directory, showid, debug, backup):
     extension = os.path.splitext(target)[1][1:]
 
     config = ConfigParser.RawConfigParser()
@@ -152,17 +85,17 @@ def fixFile( target, directory, showid, debug, backup ):
     if debug:
         print "call to tvrage.py = tvrage.py " + title + " " + season + \
             " " + str(episodes) + " --showid " + `showid`
-        newfile = tvrage.getName(title, showid, int(season), episodes)
+    newfile = tvrage.getName(title, showid, int(season), episodes)
 
     source = os.path.normpath(directory + "/" + target)
     if newfile[len(newfile) - 1] != '.':
         if debug:
             print "Renaming: " + target + "  to:  " + newfile + "." + extension
-            dest = os.path.normpath(directory + "/" + newfile + "." + extension)
-        else:
-            if debug:
-                print "Renaming: " + target + "  to:  " + newfile + extension
-                dest = os.path.normpath(directory + "/" + newfile + extension)
+        dest = os.path.normpath(directory + "/" + newfile + "." + extension)
+    else:
+        if debug:
+            print "Renaming: " + target + "  to:  " + newfile + extension
+        dest = os.path.normpath(directory + "/" + newfile + extension)
 
     if target != (newfile + extension):
         if backup:
@@ -174,17 +107,11 @@ def fixFile( target, directory, showid, debug, backup ):
                 os.remove(backupFile)
 
             os.link(source, backupFile)
-            
+        
         os.rename(source, dest)
 
+ 
 
-##----------------------------------------------------------------------- :Main:
-##                              __  __      _      
-##                             |  \/  |__ _(_)_ _  
-##                             | |\/|/  _` | | ' \ 
-##                             |_|  |_\__,_|_|_||_|
-##                                                 
-## -----------------------------------------------------------------------------
 def main():
     reload(sys)
     sys.setdefaultencoding('utf-8')
@@ -213,17 +140,17 @@ def main():
         return 1
 
     #clear tv show cache
-        tvrage.clearCache()
-        
+    tvrage.clearCache()
+    
     if os.path.isdir(target):
         traverseDirectory(target, showid, debug, backup)
     else:
         directory = os.path.dirname(target)
         if directory == "":
             directory = "."
-            f = os.path.basename(target)
-            fixFile(f, directory, showid, debug, backup)
-            
+        f = os.path.basename(target)
+        fixFile(f, directory, showid, debug, backup)
+        
     return 0
 
 if __name__ == "__main__":
