@@ -4,3 +4,5 @@
 	Move config file
 	Deb file installs all necessary files
 	NEW .kirk-backup backup directories
+0.3 -
+	Remove debugging code.  Add examples.
